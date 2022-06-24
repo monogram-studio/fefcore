@@ -1,0 +1,69 @@
+@use 'sass:math';
+@use 'variables' as *;
+
+/**
+ * Convert pixels to rems.
+ *
+ * @param string $target Value in pixels.
+ * @param string $content Convert ration with default value string $base-size.
+ *
+ * @returns string|number Element’s property value in rems or
+ * 0 if $target is 0 which is used sometimes in maps.
+ */
+@function rem($target, $content: $size-base) {
+  @if ($target != 0) {
+    @return math.div($target, $content) * 1rem;
+  } @else {
+    @return 0;
+  }
+}
+
+/**
+ * Returns value from nested maps.
+ *
+ * @param $map First level map.
+ * @param $keys Nested maps.
+ *
+ * @return mixed Value stored in nested map.
+ */
+@function map-deep-get($map, $keys...) {
+  @each $key in $keys {
+    $map: map-get($map, $key);
+  }
+  @return $map;
+}
+
+/**
+ * Encodes color
+ * Example usage: background: url("stroke='#{encode-color($test-rgb-color)}'")
+ *
+ * @param string $color Color value, ex. cyan, #1ef, hsl(184, 100%, 53%), rgba(17, 238, 255, 0.69)
+ *
+ * @return float Rounded number.
+ */
+@function encode-color($color) {
+  @if type-of($color) == 'color' and str-index(#{$color}, '#') == 1 {
+    $hex: str-slice(ie-hex-str($color), 4);
+    $color: unquote('#{$hex}');
+    @return '%23' + $color;
+  }
+  @return $color;
+}
+
+/**
+ * Rounds number
+ *
+ * @param float $number Number to round.
+ * @param int $digits Number of decimals.
+ *
+ * @return float Rounded number.
+ */
+@function decimal-round($number, $digits: 0) {
+  $n: 1;
+  @if ($digits > 0) {
+    @for $i from 1 through $digits {
+      $n: $n * 10;
+    }
+  }
+  @return math.div(round($number * $n), $n);
+}
