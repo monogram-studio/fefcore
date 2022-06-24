@@ -35,7 +35,7 @@
 
 /**
  * Encodes color
- * Example usage: background: url("stroke='#{encode-color($test-rgb-color)}'")
+ * Example usage: background: url("stroke='#{encode-color(variable)}'")
  *
  * @param string $color Color value, ex. cyan, #1ef, hsl(184, 100%, 53%), rgba(17, 238, 255, 0.69)
  *
